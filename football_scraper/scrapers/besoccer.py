@@ -3,6 +3,7 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+from utils.styles import Colors
 
 
 
@@ -13,13 +14,13 @@ def get_matches_by_date(date_str):
     try:
         datetime.strptime(date_str, "%Y-%m-%d")
     except ValueError:
-        print("❌ Invalid date format. Use YYYY-MM-DD.")
+        print(f"{Colors.RED}[-] Invalid date format. Use YYYY-MM-DD. !")
         return []
 
     url = BASE_URL.format(date=date_str)
     response = requests.get(url)
     if response.status_code != 200:
-        print(f"❌ Failed to fetch page: {url}")
+        print(f"{Colors.RED}[-] Failed to fetch page: {url}")
         return []
 
     soup = BeautifulSoup(response.text, "html.parser")
@@ -57,7 +58,7 @@ def get_matches_by_date(date_str):
                     "source": "besoccer.com"
                 })
             except Exception as e:
-                print(f"⚠️ Error parsing match: {e}")
+                print(f"{Colors.RED}[-] Error parsing match: {e}")
                 continue
 
     return matches

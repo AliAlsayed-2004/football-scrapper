@@ -3,6 +3,7 @@
 import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
+from utils.styles import Colors
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0"
@@ -18,21 +19,21 @@ def get_matches_by_date(date_str):
         month = date_obj.strftime("%b").lower()
         day = date_obj.strftime("%d")
     except ValueError:
-        print("❌ Invalid date format. Use YYYY-MM-DD.")
+        print(f"{Colors.RED}[-] Invalid date format. Use YYYY-MM-DD.")
         return []
 
     url = BASE_URL.format(year=year, month=month, day=day)
     response = requests.get(url, headers=HEADERS)
 
     if response.status_code != 200:
-        print(f"❌ Failed to fetch page: {url}")
+        print(f"{Colors.RED}[-] Failed to fetch page: {url}")
         return []
 
     soup = BeautifulSoup(response.text, "html.parser")
     table = soup.find("table", class_="standard_tabelle")
 
     if not table:
-        print(f"❌ No match data available for {date_str}.")
+        print(f"{Colors.RED}[-] No match data available for {date_str}.")
         return []
 
     matches = []
